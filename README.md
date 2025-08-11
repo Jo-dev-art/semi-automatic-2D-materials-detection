@@ -4,6 +4,7 @@ Work Guide: Semi-Automatic 2D materials detection
 
 Overview
 This system is designed to automate the analysis of specific target features within material science images. The entire workflow is divided into two main scripts:
+
 Step 1: find_cond.py (Condition Setup): This is a one-time setup script used to define the precise color range of a target feature under specific lighting conditions.
 
 Step 2: cluster.py (Automated Analysis): This is the daily-use script that reads the pre-defined conditions to perform rapid analysis on new images.
