@@ -25,7 +25,7 @@ for cond in conditions:
     F=np.logical_and(cond[1]*A[cond[0]]>cond[1]*cond[2],F) #creat binary mask
 '''   
 plt.figure()
-plt.imshow(F)
+plt.imshow(F) #you can check the original channel connection
 '''
 #%%
 labeled, ncomponents = label(F, structure)
@@ -38,3 +38,4 @@ B=np.where(labeled==count_list[0,1],1,0) #Final result
 plt.figure()
 
 plt.imshow(B)
+
