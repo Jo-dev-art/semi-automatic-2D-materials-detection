@@ -23,10 +23,10 @@ print(conditions)
 F=np.ones_like(A[0]) #Color filter mask
 for cond in conditions:
     F=np.logical_and(cond[1]*A[cond[0]]>cond[1]*cond[2],F) #creat binary mask
-    
+'''   
 plt.figure()
 plt.imshow(F)
-
+'''
 #%%
 labeled, ncomponents = label(F, structure)
 
@@ -36,4 +36,5 @@ count_list=count_list[:,np.argsort(counts)][:,::-1] #Choose count_list[0.1],args
 
 B=np.where(labeled==count_list[0,1],1,0) #Final result
 plt.figure()
+
 plt.imshow(B)
