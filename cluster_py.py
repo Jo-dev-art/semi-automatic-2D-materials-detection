@@ -4,7 +4,7 @@ from scipy.ndimage import label
 from PIL import Image
 import matplotlib.pyplot as plt
 
-im=Image.open(r'Y:/Gufos/Users/Jean/JEAN/WSe2_sequre.PNG.jpg')
+im=Image.open(r'c:\Users\ASUS\Downloads\testimages\IMG00281.jpg')
 A = np.array(im).transpose((2,0,1)) #RGB chaneels from(heigh, width, channel) to (channel, heigth, width) A[0]=R A=[1]=G A=[2]=B
 structure = np.ones((3, 3), dtype=int) 
 
@@ -23,10 +23,10 @@ print(conditions)
 F=np.ones_like(A[0]) #Color filter mask
 for cond in conditions:
     F=np.logical_and(cond[1]*A[cond[0]]>cond[1]*cond[2],F) #creat binary mask
-'''   
+    
 plt.figure()
-plt.imshow(F) #you can check the original channel connection
-'''
+plt.imshow(F)
+
 #%%
 labeled, ncomponents = label(F, structure)
 
@@ -36,6 +36,4 @@ count_list=count_list[:,np.argsort(counts)][:,::-1] #Choose count_list[0.1],args
 
 B=np.where(labeled==count_list[0,1],1,0) #Final result
 plt.figure()
-
 plt.imshow(B)
-
