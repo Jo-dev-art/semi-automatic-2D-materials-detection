@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+import os
+
+CURRENT_IMAGE = None
 
 class InteractiveSelector:
     def __init__(self, image_path):
@@ -8,7 +11,7 @@ class InteractiveSelector:
         self.A = np.array(self.im)
         self.selected_points = []
         self.selected_points_color = []
-        self.max_clicks = 15
+        self.max_clicks = 1
         self.fig = None
         self.ax = None
         
@@ -108,30 +111,18 @@ class InteractiveSelector:
         print(f"Conditions: {conditions}")
        
         
-        np.save("conditions.npy", conditions)
+        np.save(f".\conditions\{CURRENT_IMAGE.split('.')[0]}-conditions.npy", conditions)
         return conditions, rgb_ranges
-  
+
+
+# new function
+def process(image_path):
+    selector = InteractiveSelector(image_path)
+    print("Click 1 point inside any of monolayers")
+    points = selector.select_target_region()
 
 # Usage example
 if __name__ == "__main__":
-    # Update the path to your image
-    image_path = r"C:\Users\po75quv\Downloads\Figure_1.png"  # Change this to your image path
-    
-    selector = InteractiveSelector(image_path)
-    points = selector.select_target_region()
-    '''
-    print("Click up to 15 points on the image to define your target region...")
-    
-    
-    if points:
-        print(f"\nSelection complete! {len(points)} points selected.")
-        conditions, rgb_analysis = selector.organize_rgb_ranges()
-        
-        # You can also adjust tolerance
-        print("\n" + "="*10)
-        print("TRYING WITH DIFFERENT TOLERANCE...")
-        conditions_tight, _ = selector.organize_rgb_ranges(tolerance=10)
-        print("Tighter conditions (tolerance=10):", conditions_tight)
-    else:
-        print("No points were selected.")
-   '''
+    for file in os.listdir('images'):
+        CURRENT_IMAGE = file
+        process('images\\' + file)
