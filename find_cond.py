@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
-import os
-
-CURRENT_IMAGE = None
 
 class InteractiveSelector:
     def __init__(self, image_path):
@@ -11,7 +8,7 @@ class InteractiveSelector:
         self.A = np.array(self.im)
         self.selected_points = []
         self.selected_points_color = []
-        self.max_clicks = 1
+        self.max_clicks = 15
         self.fig = None
         self.ax = None
         
@@ -26,16 +23,10 @@ class InteractiveSelector:
             self.fig.canvas.draw()
             
             clicks_remaining = self.max_clicks - len(self.selected_points)
-            '''
-            print(f"Click {len(self.selected_points)}: Position ({x}, {y}), RGB: {rgb}")
-            print(f"Clicks remaining: {clicks_remaining}")
-            '''
+       
             # Stop after 15 clicks
             if len(self.selected_points) >= self.max_clicks:
-                '''    
-                    print("\n15 clicks reached! Stopping selection...")
-                    
-                '''
+         
                 
                 plt.close(self.fig)
                 self.organize_rgb_ranges()
@@ -62,20 +53,11 @@ class InteractiveSelector:
         # Extract RGB values from all selected points
         rgbs = np.array([point[2] for point in self.selected_points])
         
-        '''
-        print(f"\n=== RGB ANALYSIS FROM {len(self.selected_points)} CLICKS ===")
-        print(f"Selected RGB values:")
-        
-        for i, (x, y, rgb) in enumerate(self.selected_points):
-            print(f"  Click {i+1}: ({x}, {y}) -> RGB({rgb[0]}, {rgb[1]}, {rgb[2]})")
-        '''
+
         # Organize by R, G, B channels
         channel_names = ['Red (R)', 'Green (G)', 'Blue (B)']
         rgb_ranges = {}
-        
-        '''
-        print(f"\n=== RGB CHANNEL RANGES (tolerance = ±{tolerance}) ===")
-        '''
+    
         for channel in range(3):
             channel_values = rgbs[:, channel]
             min_val = max(-1, channel_values.min() - tolerance)
@@ -89,14 +71,7 @@ class InteractiveSelector:
                 
             }
             
-            '''
-            print(f"{channel_names[channel]}:")
-            print(f"  Raw range: {channel_values.min()} - {channel_values.max()}")
-            print(f"  With tolerance: {min_val} - {max_val}")
-           
-            print(f"  All values: {sorted(channel_values)}")
-            print()
-            '''
+      
         # Generate conditions in your original format
         conditions = []
         for channel in range(3):
@@ -111,18 +86,14 @@ class InteractiveSelector:
         print(f"Conditions: {conditions}")
        
         
-        np.save(f".\conditions\{CURRENT_IMAGE.split('.')[0]}-conditions.npy", conditions)
+        np.save("conditions.npy", conditions)
         return conditions, rgb_ranges
-
-
-# new function
-def process(image_path):
-    selector = InteractiveSelector(image_path)
-    print("Click 1 point inside any of monolayers")
-    points = selector.select_target_region()
+  
 
 # Usage example
 if __name__ == "__main__":
-    for file in os.listdir('images'):
-        CURRENT_IMAGE = file
-        process('images\\' + file)
+    # Update the path to your image
+    image_path = r"C:\Users\po75quv\Downloads\Figure_1.png"  # Change this to your image path
+    
+    selector = InteractiveSelector(image_path)
+    points = selector.select_target_region()
